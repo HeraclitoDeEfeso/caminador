@@ -8,27 +8,27 @@ Alejandro Araneda https://github.com/HeraclitoDeEfeso
 
 Citia Capece https://github.com/CintiaCapece
 
-Lucas Nevado nevadolucas@gmail.com
+Lucas Nevado https://github.com/lnevado
 
 ## Planificación
 
 ### Primera iteración
 
- -  Requerimientos (listado, preguntas) :star:
-     -  Casos de uso (escrito, preguntas) :star:
-         -  Casos de uso (UML) ["Solución propuesta"] :star:
-         -  Unidad de procesamiento (comparativa) ["Solución propuesta"] :boom:
-             -  Entorno de desarrollo (elección, documentación) ["Implementación"] :boom:
-             -  Diagrama de implantación (UML) ["Solución propuesta"] :boom:
-                 -  Protocolos de comunicación (elección, documentación, investigación) :fire:
-                     -  Smoke test ["Implementación"] :fire:
-         -  Modelo de datos (DER, preguntas) ["Solución propuesta"] :boom:
-             -  Tablas, tecnología y API ["Implementación"] :fire:
- -  Investigar problemática y soluciones ["Introducción"] :star: 
- -  Investigar relevancia Sist.Comp. en medicina ["Introducción"] :star:
-     -  Redactar Introducción ["Introducción"] :boom:
-     -  Redactar Resumen ["Resumen"] :boom:
-     -  Incorporar referencias en formato APA ["Referencias"] :boom:
+ -  Requerimientos (listado, preguntas) :star: A1
+     -  Casos de uso (escrito, preguntas) :star: B1
+         -  Casos de uso (UML) ["Solución propuesta"] :star: C1
+         -  Unidad de procesamiento (comparativa) ["Solución propuesta"] :boom: C2
+             -  Entorno de desarrollo (elección, documentación) ["Implementación"] :boom: D1
+             -  Diagrama de implantación (UML) ["Solución propuesta"] :boom: D2
+                 -  Protocolos de comunicación (elección, documentación, investigación) :fire: E
+                     -  Smoke test ["Implementación"] :fire: F
+         -  Modelo de datos (DER, preguntas) ["Solución propuesta"] :boom: C3
+             -  Tablas, tecnología y API ["Implementación"] :fire: D3
+ -  Investigar problemática y soluciones ["Introducción"] :star: A2
+ -  Investigar relevancia Sist.Comp. en medicina ["Introducción"] :star: A3
+     -  Redactar Introducción ["Introducción"] :boom: B2
+     -  Redactar Resumen ["Resumen"] :boom: B3
+     -  Incorporar referencias en formato APA ["Referencias"] :boom: B4
 
 ### Marcas
 
