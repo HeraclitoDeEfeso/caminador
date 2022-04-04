@@ -2,13 +2,20 @@
 
 Proyecto para la materia Construcción de Sistemas de Computadora dictada en la UNTREF en el ciclo lectivo 2022
 
-# Integrantes
+## Integrantes
 
 Alejandro Araneda https://github.com/HeraclitoDeEfeso
 
 Citia Capece https://github.com/CintiaCapece
 
 Lucas Nevado https://github.com/lnevado
+
+## Descripción de archivos
+
+|Archivo                              |Descripción                |
+|-------------------------------------|---------------------------|
+|[`README.md`](README.md)             | Éste archivo              |
+|[`requirements.md`](requirements.md) | Listado de requerimientos |
 
 ## Planificación
 
