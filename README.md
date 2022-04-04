@@ -55,7 +55,9 @@ Lucas Nevado https://github.com/lnevado
 
 ## Informe
 
-- [ ] Carátula.
+Apartados del [informe](https://docs.google.com/document/d/1IO5I7xsA459NNyNCNHCY1yhwtyM__OJd/edit?usp=sharing&ouid=116500235593716550954&rtpof=true&sd=true) que se encuentran completados.
+
+- [X] Carátula.
 - [ ] Resumen.
 - [ ] Introducción.
 - [ ] Estado del arte.
