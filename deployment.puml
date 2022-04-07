@@ -1,0 +1,24 @@
+@startuml
+node movil {
+    component AplicacionControl
+    database HistorialLocal
+    AplicacionControl ..> HistorialLocal
+}
+cloud Internet
+node server {
+    component Servicio
+    database HistorialRemoto
+    Servicio ..> HistorialRemoto
+}
+node micro {
+    component Firmware
+}
+rectangle HC05
+rectangle GS110
+'hide GS110
+AplicacionControl - Internet : HTTP
+AplicacionControl -- HC05 : Bluetooth
+HC05 -- Firmware : UART
+Internet - Servicio : HTTP
+Firmware -- GS110 : analog
+@enduml
