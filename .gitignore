@@ -1,1 +1,2 @@
-arduino/arduino.ino.with_bootloader.standard.hex
+*.with_bootloader.standard.hex
+*.pdsbak
