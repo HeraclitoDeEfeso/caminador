@@ -4,6 +4,7 @@
 #define potePin A0
 int velocidad = 0;
 int pote = 0;
+bool shouldPrint = false;
 
 void setup() {
   pinMode(motorPin, OUTPUT);
@@ -11,10 +12,11 @@ void setup() {
   pinMode(hardStopPin, INPUT);
   Serial.begin(9600);
   while (!Serial);
-  Serial.println("Velocidad 0 a 10");
+  Serial.println("Velocidad de 0 a 10");
 }
 
 void setVelocidad(int velocidadSerial) {
+  shouldPrint = shouldPrint || velocidad != velocidadSerial;
   if (velocidadSerial >= 0 && velocidadSerial <= 10) {
     velocidad = velocidadSerial;
     int velocidad_out = 255 * (float(velocidad) / 10);
@@ -37,16 +39,30 @@ void blinkLeds() {
   delay(200);
 }
 
-void getPote() {
-  pote = analogRead(potePin);
+int getPote() {
+  int poteSerial = analogRead(potePin);
+  shouldPrint = shouldPrint || pote != poteSerial;
+  pote = poteSerial;
+  return pote;
 }
 
-void printData() {
-  Serial.print("Velocidad: ");
-  Serial.print(velocidad);
-  Serial.print(" - ");
-  Serial.print("Peso: ");
-  Serial.println(pote);
+void printDataTerminal() {
+  if(shouldPrint) {
+    Serial.print("Velocidad: ");
+    Serial.print(velocidad);
+    Serial.print(" - ");
+    Serial.print("Peso: ");
+    Serial.println(pote);
+  }
+  shouldPrint = false;
+}
+
+void printDataBT() {
+  if(shouldPrint) {
+    Serial.println(velocidad);
+    Serial.println(pote);
+  }
+  shouldPrint = false;
 }
 
 void loop() {
@@ -63,6 +79,6 @@ void loop() {
     setVelocidad(0);
     blinkLeds();
   }
-  printData();
+  printDataTerminal();
   delay(1);
 }
