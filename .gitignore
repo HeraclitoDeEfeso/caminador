@@ -1,2 +1,4 @@
 *.with_bootloader.standard.hex
 *.pdsbak
+*\build
+*.workspace
