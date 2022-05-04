@@ -1,0 +1,35 @@
+@startuml
+
+[*] -> Init
+Init --> Idle 
+Idle -> Config : begin_config
+Idle -left-> Getset : begin_program
+Getset --> Ready : end_program
+Ready --> Getset : begin_program
+Ready -> Run : run
+Run -> Ready : completed
+Run -> Pause : pause
+Pause -> Run : continue
+Idle --> [*]
+
+Idle : motor: off
+Idle : out: null
+Idle : in: command
+Getset : motor: off
+Getset : out: ack
+Getset : in: step
+Config : motor: off
+Config : out: weight
+Config : in: command
+Ready : motor: off
+Ready : out: weight
+Ready : in: command
+Run : motor: on
+Run : out: null
+Run : in: command
+Pause : motor: off
+Pause : out: null
+Pause : in: command
+
+
+@enduml
