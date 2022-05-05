@@ -3,14 +3,16 @@
 [*] -> Init
 Init --> Idle 
 Idle -> Config : begin_config
+Config -> Idle : end_config
 Idle -left-> Getset : begin_program
+Getset -right-> Idle: discard
 Getset --> Ready : end_program
 Ready --> Getset : begin_program
 Ready -> Run : run
 Run -> Ready : completed
 Run -> Pause : pause
 Pause -> Run : continue
-Idle --> [*]
+
 
 Idle : motor: off
 Idle : out: null
