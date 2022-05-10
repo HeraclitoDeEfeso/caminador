@@ -1,0 +1,39 @@
+@startdot
+graph ER {
+	layout=dot
+	concentrate=true
+	node [shape=box,style="filled",fillcolor=lightblue] Usuario; 
+		{node [shape=invtriangle, label=""] esUsuario; esAsistente}
+		{node [peripheries = 2] Asistente; Doctor}
+		Ubicación; Máquina; Paciente; Entrenamiento; Ejercicio
+	node [shape=diamond,fillcolor=lightgreen]; 
+		administra; supervisa; realiza; agrupa; contiene
+	node [shape=ellipse,fillcolor=orange];
+		correo; contraseña; dirección; tipo 
+		identificador; fecha; peso;
+		modalidad; duración; velocidad
+		{node [label="nombre"] nombre0; nombre1}
+		{node [label="historia clínica"] historia}
+	nombre0 -- Usuario
+	correo -- Usuario
+	contraseña -- Usuario
+	Usuario -- esUsuario -- Asistente -- esAsistente -- Doctor -- administra
+	rank=same {Asistente -- supervisa -- Paciente -- realiza}
+    administra -- Ubicación 
+	subgraph cluster0 {
+	    peripheries=0
+	    rank=same {Ubicación -- contiene -- Máquina}
+    	Ubicación -- dirección
+	    Ubicación -- tipo 
+	    Máquina -- identificador
+	}
+	realiza -- Entrenamiento -- agrupa -- Ejercicio
+	nombre1 -- Paciente
+	historia -- Paciente
+	fecha -- realiza
+	peso -- realiza
+	rank=same {Entrenamiento -- modalidad}
+	Ejercicio -- duración
+	Ejercicio -- velocidad 
+}
+@enddot
