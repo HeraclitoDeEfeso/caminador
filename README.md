@@ -16,6 +16,14 @@ Lucas Nevado https://github.com/lnevado
 |-------------------------------------|---------------------------|
 |[`README.md`](README.md)             | Éste archivo              |
 |[`requirements.md`](requirements.md) | Listado de requerimientos |
+| arduino                             | Proyecto de Arduino       |
+| proteus                             | Proyecto de Proteus       |
+| pruebas-de-concepto                 | Proyectos de pruebas y videos |
+| deployment.png                      | Diagrama de Implantación (render) |
+| deployment.puml                     | Diagrama de Implantación (PlantUML) |
+| deployment.svg                      | Diagrama de Implantación + íconos |
+| usecases.png                        | Diagrama de Casos de Uso (render) |
+| usecases.puml                       | Diagrama de Casos de Uso (PlantUML) |
 
 ## Planificación
 
@@ -60,6 +68,8 @@ Apartados del [informe](https://docs.google.com/document/d/1IO5I7xsA459NNyNCNHCY
 - [X] Carátula.
 - [ ] Resumen.
 - [ ] Introducción.
+- [ ] Descripción de la práctica
+- [ ] Alcance
 - [ ] Estado del arte.
 - [ ] Solución propuesta.
 - [ ] Implementación.
