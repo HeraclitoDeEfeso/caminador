@@ -1,4 +1,14 @@
 {
+  "db": {
+    "mongo": {
+        "port": 27017,
+        "host": "mongodb",
+        "dbname": "caminador"
+        }
+    },
+    "server": {
+        "port": 3800
+    },
     "development": {
       "username": "postgres",
       "password": "postgres",
