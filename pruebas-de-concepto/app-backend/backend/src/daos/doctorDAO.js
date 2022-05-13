@@ -10,7 +10,10 @@ class DoctorDAO{
     }
 
     static find(filter, pagination){
-        return Doctor.find(filter).limit(pagination.limit).skip(pagination.offset);
+        return Doctor.find(filter).limit(pagination.limit).skip(pagination.offset)
+        .populate("Centromedico")
+        .populate("Asistente")
+        .populate("Paciente");
     }
 
     static count(filter){

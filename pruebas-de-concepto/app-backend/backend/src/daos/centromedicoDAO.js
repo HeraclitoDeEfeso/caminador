@@ -10,7 +10,8 @@ class CentromedicoDAO{
     }
 
     static find(filter, pagination){
-        return Centromedico.find(filter).limit(pagination.limit).skip(pagination.offset);
+        return Centromedico.find(filter).limit(pagination.limit).skip(pagination.offset)
+        .populate("Maquina");
     }
 
     static count(filter){

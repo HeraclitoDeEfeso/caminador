@@ -9,6 +9,12 @@ const EntrenamientoSchema = Schema({
 	peso: {
 		type: String,
 	},
+	modalidad: {
+		type: String,
+	},
+	ejercicio: {
+		type: Schema.ObjectId, ref:"Ejercicio"
+	},
 	
 });
 

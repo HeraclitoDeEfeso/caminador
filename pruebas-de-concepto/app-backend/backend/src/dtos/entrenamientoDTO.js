@@ -6,6 +6,8 @@ class EntrenamientoDTO extends GenericModelDTO {
 		this.id = null
 		this.fecha = null
 		this.peso = null
+    this.modalidad=null
+    this.ejercicio=null
     }
 
     hydrate(data){

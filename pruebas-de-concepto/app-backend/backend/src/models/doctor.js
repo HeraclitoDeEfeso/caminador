@@ -4,13 +4,13 @@ const Schema = mongoose.Schema;
 
 const DoctorSchema = Schema({
 	centromedico: {
-		type: String,
+		type: Schema.ObjectId, ref:"Centromedico"
 	},
 	asistente: {
-		type: String,
+		type: Schema.ObjectId, ref:"Asistente"
 	},
 	paciente: {
-		type: String,
+		type: Schema.ObjectId, ref:"Paciente"
 	},
 	
 });

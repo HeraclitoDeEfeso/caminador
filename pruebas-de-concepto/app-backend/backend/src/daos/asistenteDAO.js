@@ -10,7 +10,8 @@ class AsistenteDAO{
     }
 
     static find(filter, pagination){
-        return Asistente.find(filter).limit(pagination.limit).skip(pagination.offset);
+        return Asistente.find(filter).limit(pagination.limit).skip(pagination.offset)
+        .populate("Paciente");
     }
 
     static count(filter){

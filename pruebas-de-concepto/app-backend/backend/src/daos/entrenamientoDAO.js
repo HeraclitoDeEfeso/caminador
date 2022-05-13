@@ -10,7 +10,8 @@ class EntrenamientoDAO{
     }
 
     static find(filter, pagination){
-        return Entrenamiento.find(filter).limit(pagination.limit).skip(pagination.offset);
+        return Entrenamiento.find(filter).limit(pagination.limit).skip(pagination.offset)
+        .populate("Ejercicio");
     }
 
     static count(filter){

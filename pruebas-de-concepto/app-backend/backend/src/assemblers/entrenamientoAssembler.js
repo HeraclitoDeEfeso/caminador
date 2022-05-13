@@ -18,6 +18,8 @@ class EntrenamientoAssembler extends GenericAssembler{
 		const entrenamientoDTO = super.toDTO(entrenamiento, EntrenamientoDTO)
 		entrenamientoDTO.fecha = entrenamiento.fecha
 		entrenamientoDTO.peso = entrenamiento.peso
+		entrenamientoDTO.modalidad = entrenamiento.modalidad
+		entrenamientoDTO.ejercicio = entrenamiento.ejercicio
 		
 		return entrenamientoDTO
 	}
@@ -26,7 +28,8 @@ class EntrenamientoAssembler extends GenericAssembler{
 		const entrenamiento = super.fromDTO(entrenamientoDTO, Entrenamiento)
 		entrenamiento.fecha = entrenamientoDTO.fecha
 		entrenamiento.peso = entrenamientoDTO.peso
-		
+		entrenamiento.modalidad = entrenamientoDTO.modalidad
+		entrenamiento.ejercicio = entrenamientoDTO.ejercicio
 		return entrenamiento
 	}
 
