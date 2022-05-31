@@ -20,5 +20,5 @@ AplicacionControl - Internet : HTTP
 AplicacionControl -- HC05 : Bluetooth
 HC05 -- Firmware : UART
 Internet - Servicio : HTTP
-Firmware -- GS110 : analog
+Firmware - GS110 : analog
 @enduml
