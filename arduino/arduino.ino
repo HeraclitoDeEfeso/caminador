@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "Fsm.h"
 
 #define motorPin    9
@@ -23,7 +24,7 @@ enum Events {
 };
 
 struct Step {
-  int seconds;
+  unsigned long seconds;
   int velocity;  
 };
 
@@ -42,6 +43,7 @@ int current_step = 0;
 unsigned long stop_time = 0;
 unsigned long remain_time = 0;
 enum Events event = EVENT_NULL;
+enum Events event_prev = EVENT_NULL;
 
 void setup() {
   pinMode(motorPin, OUTPUT);
@@ -57,9 +59,12 @@ void setup() {
   fsm.add_transition(&state_ready, &state_getset, EVENT_BEGIN_PROGRAM, NULL);
   fsm.add_transition(&state_run, &state_ready, EVENT_COMPLETED, NULL);
   fsm.add_transition(&state_run, &state_pause, EVENT_PAUSE, NULL);
+  fsm.add_transition(&state_run, &state_run, EVENT_NULL, NULL);
   fsm.add_transition(&state_pause, &state_run, EVENT_CONTINUE, NULL);
   fsm.add_transition(&state_config, &state_idle, EVENT_END_CONFIG, NULL);
   Serial.println("Setup ready.");
+  fsm.run_machine();
+  Serial.println("Entering main loop.");
 }
 
 void loop() {
@@ -79,11 +84,12 @@ void loop() {
   // }
   // printData();
   // delay(1);
-  Serial.println("Main loop.");
   char command;
   if(event == EVENT_NULL){
     if(Serial.available()){
       command = Serial.read();
+      Serial.print("Recived command:");
+      Serial.println(command);
       switch (command) {
         case 'a':
           event = EVENT_BEGIN_PROGRAM;
@@ -115,7 +121,13 @@ void loop() {
       };
     };
   };
+  event_prev = event;
   fsm.trigger(event);
+  if(event != EVENT_NULL && event == event_prev){
+    Serial.println("Command unattended.");
+    while(Serial.available()){Serial.read();};
+    event = EVENT_NULL;
+  }
 }
 
 void on_state_idle(){
@@ -133,20 +145,33 @@ void on_state_getset(){
   int vel = 0;
   int i;
   Serial.println("State_getset.");
+  Serial.setTimeout(10000);
   event = EVENT_NULL;
-  for(i = 0; i < MAX_STEPS; i++){
-    program[i].seconds = 0;
-    program[i].velocity = 0; 
-  }
+  memset(program, 0, sizeof(program));
+  Serial.print("Enter step:");
+  Serial.println(steps);
   while(steps < MAX_STEPS){
     if(Serial.available()){
+      memset(buffer, '\0', sizeof(buffer));
       if(Serial.readBytesUntil('\n', buffer, STEP_STRING_SIZE) 
         && sscanf(buffer, "%d:%d#%d", &min, &sec, &vel) == 3){
           program[steps].seconds = min * 60 + sec;
           program[steps].velocity = vel; 
           steps++;
           Serial.println("ACK");
+          Serial.print("Reading ");
+          Serial.println(buffer);
+          Serial.print("Min: ");
+          Serial.println(min);
+          Serial.print("Sec: ");
+          Serial.println(sec);
+          Serial.print("Vel: ");
+          Serial.println(vel);
+          Serial.print("Enter step:");
+          Serial.println(steps);
       } else {
+        Serial.print("Done reading after:");
+        Serial.println(buffer);
         break;
       }
     }
@@ -160,15 +185,7 @@ void on_state_getset(){
 
 void on_state_config(){
   Serial.println("State_config.");
-  int prev_pote = pote;
-  event = EVENT_NULL;
-  while(!Serial.available()){
-    getPote();
-    if(pote != prev_pote){
-      Serial.println(pote);
-      prev_pote = pote;
-    }
-  }
+  sendPote();
 }
 
 void on_state_ready(){
@@ -176,29 +193,49 @@ void on_state_ready(){
   event = EVENT_NULL;
   current_step = 0;
   remain_time = 0;
-  on_state_config();
+  stop_time = 0;
+  sendPote();
 }
 
 void on_state_run(){
-  Serial.println("State_run.");
-  event = EVENT_NULL;
+  if(event != EVENT_NULL){
+    Serial.println("State_run.");
+    event = EVENT_NULL;
+  }
   while(true){
     if(current_step < MAX_STEPS && program[current_step].seconds != 0){
-      if(remain_time){
+      if(remain_time != 0){
+        Serial.print("Continue step:");
+        Serial.println(current_step);
+        Serial.print("Remain time (ms):");
+        Serial.println(remain_time);
+        Serial.print("Velocity:");
+        Serial.println(program[current_step].velocity);
         stop_time = millis() + remain_time;
         remain_time = 0;
-      } else {
+      } else if(stop_time == 0){
+        Serial.print("Start step:");
+        Serial.println(current_step);
+        Serial.print("Duration (s):");
+        Serial.println(program[current_step].seconds);
+        Serial.print("Velocity:");
+        Serial.println(program[current_step].velocity);
         stop_time = millis() + program[current_step].seconds * 1000;
       };
       setVelocidad(program[current_step].velocity);
       while(!Serial.available() && millis() < stop_time);
       if(Serial.available()){
+        Serial.println("Command was sent.");
         break;
       } else {
+        Serial.println("Step completed.");
         current_step++;
       }
     } else {
+      Serial.println("Program completed.");
       event = EVENT_COMPLETED;
+      setVelocidad(0);
+      break;
     }
   }
 }
@@ -240,6 +277,18 @@ void blinkLeds() {
 
 void getPote() {
   pote = analogRead(potePin);
+}
+
+void sendPote() {
+  int prev_pote = pote;
+  event = EVENT_NULL;
+  while(!Serial.available()){
+    getPote();
+    if(pote != prev_pote){
+      Serial.println(pote);
+      prev_pote = pote;
+    }
+  }
 }
 
 void printData() {
