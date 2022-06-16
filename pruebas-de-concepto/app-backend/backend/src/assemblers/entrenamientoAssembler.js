@@ -16,8 +16,6 @@ class EntrenamientoAssembler extends GenericAssembler{
 
 	static toDTO(entrenamiento) {
 		const entrenamientoDTO = super.toDTO(entrenamiento, EntrenamientoDTO)
-		entrenamientoDTO.fecha = entrenamiento.fecha
-		entrenamientoDTO.peso = entrenamiento.peso
 		entrenamientoDTO.modalidad = entrenamiento.modalidad
 		entrenamientoDTO.ejercicio = entrenamiento.ejercicio
 		
@@ -26,8 +24,6 @@ class EntrenamientoAssembler extends GenericAssembler{
 
 	static fromDTO(entrenamientoDTO) {
 		const entrenamiento = super.fromDTO(entrenamientoDTO, Entrenamiento)
-		entrenamiento.fecha = entrenamientoDTO.fecha
-		entrenamiento.peso = entrenamientoDTO.peso
 		entrenamiento.modalidad = entrenamientoDTO.modalidad
 		entrenamiento.ejercicio = entrenamientoDTO.ejercicio
 		return entrenamiento

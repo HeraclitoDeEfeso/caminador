@@ -1,11 +1,12 @@
 const GenericModelDTO = require('./genericModelDTO')
 
-class EntrenamientoDTO extends GenericModelDTO {
+class BitacoraDTO extends GenericModelDTO {
     constructor(){
 		super()
 		this.id = null
-    this.modalidad=null
-    this.ejercicio=null
+		this.fecha = null
+		this.peso = null
+		this.entrenamiento = null
     }
 
     hydrate(data){
@@ -13,4 +14,4 @@ class EntrenamientoDTO extends GenericModelDTO {
     }
 }
 
-module.exports = EntrenamientoDTO
+module.exports = BitacoraDTO

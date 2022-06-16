@@ -3,12 +3,7 @@ const Schema = mongoose.Schema;
 
 
 const EntrenamientoSchema = Schema({
-	fecha: {
-		type: Date,
-	},
-	peso: {
-		type: String,
-	},
+
 	modalidad: {
 		type: String,
 	},
