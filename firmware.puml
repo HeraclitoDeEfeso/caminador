@@ -1,18 +1,22 @@
 @startuml
 
-[*] -> Init
-Init --> Idle 
+[*] --> Idle 
 Idle -> Config : begin_config
 Config -> Idle : end_config
 Idle -left-> Getset : begin_program
-Getset -right-> Idle: discard
-Getset --> Ready : end_program
-Ready --> Getset : begin_program
-Ready -> Run : run
-Run -> Ready : completed
-Run -> Pause : pause
-Pause -> Run : continue
 
+
+Getset --> Ready : end_program
+Ready -> Run : run
+Ready -up-> Idle : discard
+Run -> Ready : program_completed
+Run -> Step : start
+Run -up-> Idle : discard
+Step -> Run : step_completed
+Step -> Pause : pause
+Step -up-> Idle : discard
+Pause -> Step : continue
+Pause -up-> Idle : discard
 
 Idle : motor: off
 Idle : out: null
@@ -24,12 +28,21 @@ Config : motor: off
 Config : out: weight
 Config : in: command
 Ready : motor: off
+Ready : step: 0
 Ready : out: weight
 Ready : in: command
-Run : motor: on
+Run : motor: off
+Run : duration: min + sec
+Run : step++
 Run : out: null
 Run : in: command
+Step : motor: on
+Step : start: time
+Step : stop: start + duration
+Step : out: null
+Step : in: command
 Pause : motor: off
+Pause : duration: stop - time
 Pause : out: null
 Pause : in: command
 
