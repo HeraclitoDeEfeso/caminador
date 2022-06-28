@@ -2,9 +2,9 @@
 #include <string.h>
 #include "Fsm.h"
 
-#define motorPin    9
+#define motorPin    6
 #define ledPin      12
-#define hardStopPin 2
+#define hardStopPin 4
 #define potePin     A0
 #define MAX_STEPS   10
 #define STEP_STRING_SIZE 8
