@@ -62,9 +62,9 @@ void setup() {
   fsm.add_transition(&state_run, &state_run, EVENT_NULL, NULL);
   fsm.add_transition(&state_pause, &state_run, EVENT_CONTINUE, NULL);
   fsm.add_transition(&state_config, &state_idle, EVENT_END_CONFIG, NULL);
-  Serial.println("Setup ready.");
+  //Serial.println("Setup ready.");
   fsm.run_machine();
-  Serial.println("Entering main loop.");
+  //Serial.println("Entering main loop.");
 }
 
 void loop() {
@@ -84,13 +84,14 @@ void loop() {
   // }
   // printData();
   // delay(1);
-  char command;
+  // TODO: unificar recebir comandos y pasos en el loop
+  char command[STEP_STRING_SIZE + 1] = {0};
   if(event == EVENT_NULL){
     if(Serial.available()){
-      command = Serial.read();
-      Serial.print("Recived command:");
-      Serial.println(command);
-      switch (command) {
+      Serial.readBytesUntil('\n', command, STEP_STRING_SIZE);
+      //Serial.print("Recived command:");
+      //Serial.println(command);
+      switch (command[0]) {
         case 'a':
           event = EVENT_BEGIN_PROGRAM;
           break;
@@ -124,14 +125,14 @@ void loop() {
   event_prev = event;
   fsm.trigger(event);
   if(event != EVENT_NULL && event == event_prev){
-    Serial.println("Command unattended.");
+    //Serial.println("Command unattended.");
     while(Serial.available()){Serial.read();};
     event = EVENT_NULL;
   }
 }
 
 void on_state_idle(){
-  Serial.println("State_idle.");
+  //Serial.println("State_idle.");
   event = EVENT_NULL;
   setVelocidad(0);
   setLeds();
@@ -144,34 +145,33 @@ void on_state_getset(){
   int sec = 0;
   int vel = 0;
   int i;
-  Serial.println("State_getset.");
-  Serial.setTimeout(10000);
+  //Serial.println("State_getset.");
   event = EVENT_NULL;
   memset(program, 0, sizeof(program));
-  Serial.print("Enter step:");
-  Serial.println(steps);
+  //Serial.print("Enter step:");
+  //Serial.println(steps);
   while(steps < MAX_STEPS){
     if(Serial.available()){
       memset(buffer, '\0', sizeof(buffer));
-      if(Serial.readBytesUntil('\n', buffer, STEP_STRING_SIZE) 
-        && sscanf(buffer, "%d:%d#%d", &min, &sec, &vel) == 3){
-          program[steps].seconds = min * 60 + sec;
-          program[steps].velocity = vel; 
-          steps++;
-          Serial.println("ACK");
-          Serial.print("Reading ");
-          Serial.println(buffer);
-          Serial.print("Min: ");
-          Serial.println(min);
-          Serial.print("Sec: ");
-          Serial.println(sec);
-          Serial.print("Vel: ");
-          Serial.println(vel);
-          Serial.print("Enter step:");
-          Serial.println(steps);
+      Serial.readBytesUntil('\n', buffer, STEP_STRING_SIZE);
+      if(sscanf(buffer, "%d:%d#%d", &min, &sec, &vel) == 3){
+        program[steps].seconds = min * 60 + sec;
+        program[steps].velocity = vel; 
+        steps++;
+        //Serial.println("ACK");
+        //Serial.print("Reading ");
+        //Serial.println(buffer);
+        //Serial.print("Min: ");
+        //Serial.println(min);
+        //Serial.print("Sec: ");
+        //Serial.println(sec);
+        //Serial.print("Vel: ");
+        //Serial.println(vel);
+        //Serial.print("Enter step:");
+        //Serial.println(steps);
       } else {
-        Serial.print("Done reading after:");
-        Serial.println(buffer);
+        //Serial.print("Done reading after:");
+        //Serial.println(buffer);
         break;
       }
     }
@@ -184,12 +184,12 @@ void on_state_getset(){
 }
 
 void on_state_config(){
-  Serial.println("State_config.");
+  //Serial.println("State_config.");
   sendPote();
 }
 
 void on_state_ready(){
-  Serial.println("State_ready.");
+  //Serial.println("State_ready.");
   event = EVENT_NULL;
   current_step = 0;
   remain_time = 0;
@@ -199,40 +199,40 @@ void on_state_ready(){
 
 void on_state_run(){
   if(event != EVENT_NULL){
-    Serial.println("State_run.");
+    //Serial.println("State_run.");
     event = EVENT_NULL;
   }
   while(true){
     if(current_step < MAX_STEPS && program[current_step].seconds != 0){
       if(remain_time != 0){
-        Serial.print("Continue step:");
-        Serial.println(current_step);
-        Serial.print("Remain time (ms):");
-        Serial.println(remain_time);
-        Serial.print("Velocity:");
-        Serial.println(program[current_step].velocity);
+        //Serial.print("Continue step:");
+        //Serial.println(current_step);
+        //Serial.print("Remain time (ms):");
+        //Serial.println(remain_time);
+        //Serial.print("Velocity:");
+        //Serial.println(program[current_step].velocity);
         stop_time = millis() + remain_time;
         remain_time = 0;
       } else if(stop_time == 0){
-        Serial.print("Start step:");
-        Serial.println(current_step);
-        Serial.print("Duration (s):");
-        Serial.println(program[current_step].seconds);
-        Serial.print("Velocity:");
-        Serial.println(program[current_step].velocity);
+        //Serial.print("Start step:");
+        //Serial.println(current_step);
+        //Serial.print("Duration (s):");
+        //Serial.println(program[current_step].seconds);
+        //Serial.print("Velocity:");
+        //Serial.println(program[current_step].velocity);
         stop_time = millis() + program[current_step].seconds * 1000;
       };
       setVelocidad(program[current_step].velocity);
       while(!Serial.available() && millis() < stop_time);
       if(Serial.available()){
-        Serial.println("Command was sent.");
+        //Serial.println("Command was sent.");
         break;
       } else {
-        Serial.println("Step completed.");
+        //Serial.println("Step completed.");
         current_step++;
       }
     } else {
-      Serial.println("Program completed.");
+      //Serial.println("Program completed.");
       event = EVENT_COMPLETED;
       setVelocidad(0);
       break;
@@ -241,7 +241,7 @@ void on_state_run(){
 }
 
 void on_state_pause(){
-  Serial.println("State_pause.");
+  //Serial.println("State_pause.");
   unsigned long current_time = millis();
   event = EVENT_NULL;
   setVelocidad(0);
@@ -287,14 +287,15 @@ void sendPote() {
     if(pote != prev_pote){
       Serial.println(pote);
       prev_pote = pote;
+      delay(500);
     }
   }
 }
 
 void printData() {
-  Serial.print("Velocidad: ");
-  Serial.print(velocidad);
-  Serial.print(" - ");
-  Serial.print("Peso: ");
-  Serial.println(pote);
+  //Serial.print("Velocidad: ");
+  //Serial.print(velocidad);
+  //Serial.print(" - ");
+  //Serial.print("Peso: ");
+  //Serial.println(pote);
 }
