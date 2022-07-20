@@ -1,0 +1,16 @@
+const mongoose = require('mongoose');
+const app = require('../app');
+
+const config = require('../config/mongo-config');
+const serverConfig = config.server;
+
+mongoose.connect(config.getConnectionStringToMongo(), {})
+    .then(() => {
+        console.log("Conectado a la base de datos");
+        app.listen(serverConfig.port, () => {
+            console.log('Servidor escuchando peticiones');
+        })
+    })
+    .catch((err) => {
+        console.log(err);
+    })

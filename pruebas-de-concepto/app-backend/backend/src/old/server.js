@@ -3,7 +3,18 @@
 /**
  * Module dependencies.
  */
-
+ import express from 'express';
+ import HttpStatus from 'http-status-codes';
+ import Promise from 'bluebird';
+ 
+ import {authenticateRoutes, userRoutes} from './src/routers';
+ import init from './src/config/init';
+ import config from './src/config/appConfig';
+ import logger from './src/util/loger';
+ import errorFactory from './src/util/errorFactory';
+ import models from './src/models';
+ import middlewares from './src/middlewares';
+ 
 const http = require("http");
 const app = require("./app");
 
@@ -83,3 +94,25 @@ function onListening() {
 server.listen(port);
 server.on("error", onError);
 server.on("listening", onListening);
+
+const registerApi = (server) => {
+  authenticateRoutes(server);
+  userRoutes(server);
+};
+
+const registerGlobalErrorHandler = (server) => {
+  server.use((err, req, res, next) => {
+    logger.error(err.message || err, {token: req.traceId});
+    res.status(err.status || HttpStatus.INTERNAL_SERVER_ERROR)
+      .json(err || errorFactory.internalServerError(req.traceId, err));
+  });
+};
+init();
+middlewares.configure(server);
+registerApi(server);
+registerGlobalErrorHandler(server);
+models.sequelize.sync({}).then(() => {
+  server.listen(config.port, () => {
+    logger.info(`Server started and listening on port ${config.port}`);
+  });
+});

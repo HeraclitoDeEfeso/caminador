@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  caminador-cli:
+    image: node:10.16
+    container_name: caminador
+    tty: true
+    volumes:
+      - ./:/caminador/
+    links:
+      - mongodb:mongodb
+    ports:
+      - 3001:3001
+      - 3800:3800
+      
+    networks:
+      - caminador-net
+    working_dir: /caminador/
+    command: bash
+  
+  mongodb:
+    image: mongo:latest
+    container_name: mongo-test
+    tty: true
+    ports:
+      - 27017:27017
+    networks:
+      - caminador-net
+
+networks:
+  caminador-net:
+    driver: bridge
