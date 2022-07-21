@@ -1,0 +1,24 @@
+@startuml
+left to right direction
+actor Asistente
+actor Doctor
+actor Paciente
+actor GS110 <<sistema>>
+rectangle {
+Asistente -- (Registrar Paciente)
+(Registrar Paciente) -[hidden]- (Calibrar Tara)
+Asistente -- (Calibrar Tara)
+(Entrenar) -- Paciente
+(Entrenar) -- GS110
+Asistente -- (Ingresar Ejercicio)
+(Ingresar Ejercicio) -[hidden]- (Entrenar)
+Asistente -- (Registrar Entrenamiento)
+Asistente -- (Iniciar/detener Ejercicio)
+(Registrar Entrenamiento) -[hidden]- (Iniciar/detener Ejercicio)
+Doctor -- (Acceder a estadísticas)
+Doctor -- (Autenticar Doctor)
+Doctor -- (Registrar Doctor)
+(Autenticar Doctor) -[hidden]- (Registrar Doctor)
+}
+Asistente <|- Doctor
+@enduml
